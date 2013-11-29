@@ -18,12 +18,12 @@
 #include <SDL2/SDL.h>
 
 #include "renderer.h"
+#include "cache.h"
 #include "world.h"
 
 struct renderer {
 	SDL_Window *window;
 	SDL_Surface *surface;
-	SDL_Surface *images[MAX_ENTITY];
 };
 
 renderer *renderer_new() {
@@ -35,21 +35,10 @@ renderer *renderer_new() {
 	new_renderer->window = SDL_CreateWindow("SDL Rendered", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	new_renderer->surface = SDL_GetWindowSurface(new_renderer->window);
 
-	// Init all entity SDL_Surface pointers to NULL
-	for(int i = 0; i < MAX_ENTITY; i++) {
-		new_renderer->images[i] = NULL;
-	}
-	
 	return new_renderer;
 }
 
 void renderer_free(renderer *renderer) {
-	// tear down SDL
-	for(int i = 0; i < MAX_ENTITY; i++) {
-		if (renderer->images[i] != NULL) {
-			SDL_FreeSurface(renderer->images[i]);
-		}
-	}
 	SDL_FreeSurface(renderer->surface);
 	SDL_DestroyWindow(renderer->window);
 	SDL_Quit();
@@ -57,11 +46,11 @@ void renderer_free(renderer *renderer) {
 	free(renderer);
 }
 
-void renderer_render(renderer *renderer, world *world) {
+void renderer_render(renderer *renderer, world *world, cache *cache) {
 	// blit graphic componenets to the screen
 	for(int i = 0; i < MAX_ENTITY; i++) {
 		if ((world->mask[i] & GRAPHIC) == GRAPHIC) {
-			SDL_BlitSurface(renderer->images[i], NULL, renderer->surface, NULL);
+			SDL_BlitSurface(cache_get(cache, world->graphics[i].image_name), NULL, renderer->surface, NULL);
 		}
 	}
 
