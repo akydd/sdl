@@ -18,13 +18,31 @@
 #include <SDL2/SDL.h>
 
 #include "cache.h"
+#include "table.h"
 
 struct cache {
-	SDL_Surface *images[CACHE_SIZE];
+	table *table;;
 };
 
-cache *cache_new() {
+cache *cache_new()
+{
 	cache *new_cache;
 	new_cache = malloc(sizeof(cache));
+	new_cache->table = table_new();
 	return new_cache;
+}
+
+void cache_free(cache *cache)
+{
+
+}
+
+SDL_Surface *cache_get(cache *cache, const char *key)
+{
+	return table_get(&cache->table, key);
+}
+
+void cache_put(cache *cache, const char *key, const SDL_Surface *surface)
+{
+	table_put(&cache->table, key, surface);
 }

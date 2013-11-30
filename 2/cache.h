@@ -18,13 +18,11 @@
 #ifndef CACHE_H
 #define CACHE_H
 
-#define CACHE_SIZE 5
-
 typedef struct cache cache;
 
 extern cache *cache_new(void);
-extern void cache_free(cache *);
-extern SDL_Surface *cache_get(char *);
-extern SDL_Surface *cache_set(char *, SDL_Surface *);
+extern void cache_free(cache *cache);
+extern SDL_Surface *cache_get(cache *cache, const char *key);
+extern void cache_put(cache *cache, const char *key, const SDL_Surface *surface);
 
 #endif
