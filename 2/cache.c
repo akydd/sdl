@@ -21,7 +21,7 @@
 
 struct cache {
 	char *key;
-	SDL_Surface *value;
+	SDL_Texture *value;
 	struct cache *next;
 };
 
@@ -37,12 +37,12 @@ void cache_free(cache **the_cache)
 		*the_cache = tmp_ptr->next;
 
 		free(tmp_ptr->key);
-		SDL_FreeSurface(tmp_ptr->value);
+		SDL_DestroyTexture(tmp_ptr->value);
 		free(tmp_ptr);
 	}
 }
 
-SDL_Surface *cache_get(cache **the_cache, const char *key)
+SDL_Texture *cache_get(cache **the_cache, SDL_Renderer *sdl_renderer, const char *key)
 {
 	// search for key and return value if found
 	for(cache *search_ptr = *the_cache; search_ptr; search_ptr = search_ptr->next) {
@@ -55,7 +55,10 @@ SDL_Surface *cache_get(cache **the_cache, const char *key)
 	cache *new_entry = malloc(sizeof(cache));
 	new_entry->key = malloc(sizeof(char) * (strlen(key) + 1));
 	(void)strcpy(new_entry->key, key);
-	new_entry->value = SDL_LoadBMP(key);
+
+	SDL_Surface *surface = SDL_LoadBMP(key);
+	new_entry->value = SDL_CreateTextureFromSurface(sdl_renderer, surface);
+	SDL_FreeSurface(surface);
 
 	new_entry->next = *the_cache;
 	*the_cache = new_entry;	

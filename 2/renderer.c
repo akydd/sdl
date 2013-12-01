@@ -21,25 +21,25 @@
 #include "cache.h"
 
 struct renderer {
-	SDL_Window *window;
-	SDL_Surface *surface;
+	SDL_Window *sdl_window;
+	SDL_Renderer *sdl_renderer;
 };
 
 renderer *renderer_new() {
 	renderer *new_renderer;
 	new_renderer = malloc(sizeof(renderer));
 
-	// init SDL stuff
 	SDL_Init(SDL_INIT_VIDEO);
-	new_renderer->window = SDL_CreateWindow("SDL Rendered", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	new_renderer->surface = SDL_GetWindowSurface(new_renderer->window);
+	SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &new_renderer->sdl_window, &new_renderer->sdl_renderer);
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
+	SDL_RenderSetLogicalSize(new_renderer->sdl_renderer, 640, 480);
 
 	return new_renderer;
 }
 
 void renderer_free(renderer *renderer) {
-	SDL_FreeSurface(renderer->surface);
-	SDL_DestroyWindow(renderer->window);
+	SDL_DestroyRenderer(renderer->sdl_renderer);
+	SDL_DestroyWindow(renderer->sdl_window);
 	SDL_Quit();
 
 	free(renderer);
@@ -49,11 +49,11 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 	// blit graphic componenets to the screen
 	for(int i = 0; i < MAX_ENTITY; i++) {
 		if ((world->mask[i] & GRAPHIC) == GRAPHIC) {
-			SDL_BlitSurface(cache_get(&cache, world->graphics[i].image_file), NULL, renderer->surface, NULL);
+			SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[i].image_file), NULL, NULL);
 		}
 	}
 
 	// Update screen surface
-	SDL_UpdateWindowSurface(renderer->window);
+	SDL_RenderPresent(renderer->sdl_renderer);
 }
 
