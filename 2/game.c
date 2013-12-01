@@ -17,13 +17,17 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+
 #include "world.h"
+#include "cache.h"
 #include "renderer.h"
 
 int main(int argc, char **argv)
 {
 	// setup game world
 	world *game_world = world_new();
+	// setup surface cache
+	cache *cache = cache_new();
 	// setup renderer
 	renderer *renderer = renderer_new();
 	// create game entity representing screen background graphic
@@ -31,12 +35,13 @@ int main(int argc, char **argv)
 
 	// main loop isn't actually a loop, and doesn't depend on SDL. But it
 	// depends on unistd.h.
-	renderer_render(renderer, game_world);
+	renderer_render(renderer, game_world, cache);
 	(void)sleep(2);
 		
 	// tear down
 	delete_entity(game_world, entity);
 	renderer_free(renderer);
+	cache_free(&cache);
 	world_free(game_world);
 
 	return 0;

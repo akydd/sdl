@@ -15,34 +15,50 @@
  * =====================================================================================
  */
 #include <stdlib.h>
-#include <SDL2/SDL.h>
+#include <string.h>
 
 #include "cache.h"
-#include "table.h"
 
 struct cache {
-	table *table;;
+	char *key;
+	SDL_Surface *value;
+	struct cache *next;
 };
 
-cache *cache_new()
+cache *cache_new(void)
 {
-	cache *new_cache;
-	new_cache = malloc(sizeof(cache));
-	new_cache->table = table_new();
-	return new_cache;
+	return NULL;
 }
 
-void cache_free(cache *cache)
+void cache_free(cache **the_cache)
 {
+	while(*the_cache != NULL) {
+		cache *tmp_ptr = *the_cache;
+		*the_cache = tmp_ptr->next;
 
+		free(tmp_ptr->key);
+		SDL_FreeSurface(tmp_ptr->value);
+		free(tmp_ptr);
+	}
 }
 
-SDL_Surface *cache_get(cache *cache, const char *key)
+SDL_Surface *cache_get(cache **the_cache, const char *key)
 {
-	return table_get(&cache->table, key);
-}
+	// search for key and return value if found
+	for(cache *search_ptr = *the_cache; search_ptr; search_ptr = search_ptr->next) {
+		if(strcmp(key, search_ptr->key) == 0) {
+			return search_ptr->value;
+		}
+	}
 
-void cache_put(cache *cache, const char *key, const SDL_Surface *surface)
-{
-	table_put(&cache->table, key, surface);
+	// store new entry in cache and return it
+	cache *new_entry = malloc(sizeof(cache));
+	new_entry->key = malloc(sizeof(char) * (strlen(key) + 1));
+	(void)strcpy(new_entry->key, key);
+	new_entry->value = SDL_LoadBMP(key);
+
+	new_entry->next = *the_cache;
+	*the_cache = new_entry;	
+
+	return new_entry->value;
 }

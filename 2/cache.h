@@ -18,11 +18,12 @@
 #ifndef CACHE_H
 #define CACHE_H
 
+#include <SDL2/SDL.h>
+
 typedef struct cache cache;
 
 extern cache *cache_new(void);
-extern void cache_free(cache *cache);
-extern SDL_Surface *cache_get(cache *cache, const char *key);
-extern void cache_put(cache *cache, const char *key, const SDL_Surface *surface);
+extern void cache_free(cache **cache);
+extern SDL_Surface *cache_get(cache **cache, const char *key);
 
 #endif

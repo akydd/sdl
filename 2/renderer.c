@@ -19,7 +19,6 @@
 
 #include "renderer.h"
 #include "cache.h"
-#include "world.h"
 
 struct renderer {
 	SDL_Window *window;
@@ -50,7 +49,7 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 	// blit graphic componenets to the screen
 	for(int i = 0; i < MAX_ENTITY; i++) {
 		if ((world->mask[i] & GRAPHIC) == GRAPHIC) {
-			SDL_BlitSurface(cache_get(cache, world->graphics[i].image_name), NULL, renderer->surface, NULL);
+			SDL_BlitSurface(cache_get(&cache, world->graphics[i].image_file), NULL, renderer->surface, NULL);
 		}
 	}
 
