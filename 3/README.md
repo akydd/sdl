@@ -1,7 +1,7 @@
-# Key Presses
+# Getting an Image on the Screen
 
 ## Changes
-No changes from the original, other than those applied in the previous tutorial.
+No changes other than those previously mentioned in tutorial 2.
 
 ## Entity Component System
 Our system is simple, since there is no animation involved.
@@ -15,13 +15,8 @@ entity.
 The graphic component holds the filename for the components image file.
 
 ### Systems
-#### Entity Manager System (world.c)
-Contains entities and their components, and defines methods for creating and
-destroying them.
-#### Input System (input\_system.c)
-Only contains method that operates on the Entity Manager System based on input.
-#### Render system (renderer.c)
+#### Render system
 The render system is responsible for drawing entities having a graphics
 component onto the screen.  It interfaces with the cache system, below.
-#### Cache system (cache,c)
+#### Cache system
 The cache system takes care of loading and fetching SDL\_Textures.

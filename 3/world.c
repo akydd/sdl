@@ -35,13 +35,13 @@ world *world_new(void) {
 
 void world_free(world *world) {
 	for(int i = 0; i < MAX_ENTITY; i++) {
-		world_delete_entity(world, i);
+		delete_entity(world, i);
 	}
 	free(world);
 	world = NULL;
 }
 
-int world_create_entity(world *world) {
+int create_entity(world *world) {
 	for(int id = 0; id < MAX_ENTITY; id++) {
 		if (world->mask[id] == NONE) {
 			return id;
@@ -50,26 +50,23 @@ int world_create_entity(world *world) {
 	return -1;
 }
 
-void world_add_graphic_component(world *world, int entity_id, char *imagefile) {
+int create_entity_with_graphic(world *world, char *imagefile) {
+	// create the entity
+	int entity_id = create_entity(world);
 	// Allocate memory for imagefile string & copy into graphic struct
 	world->graphics[entity_id].image_file = malloc(strlen(imagefile) + 1);
 	(void)strcpy(world->graphics[entity_id].image_file, imagefile);
 	// set new mask
 	world->mask[entity_id] |= GRAPHIC;
+	
+	return entity_id;
 }
 
-void world_remove_graphic_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | GRAPHIC) == GRAPHIC) {
-		// free graphic component data, if any, and unmask
-		if (world->graphics[entity_id].image_file != NULL) {
-			free(world->graphics[entity_id].image_file);
-			world->graphics[entity_id].image_file = NULL;
-		}
-		world->mask[entity_id] &= ~(GRAPHIC);
+void delete_entity(world *world, int entity_id) {
+	// free graphic component data, if any
+	if (world->graphics[entity_id].image_file != NULL) {
+		free(world->graphics[entity_id].image_file);
+		world->graphics[entity_id].image_file = NULL;
 	}
-}
-
-void world_delete_entity(world *world, int entity_id) {
-	world_remove_graphic_component(world, entity_id);
 	world->mask[entity_id] = NONE;
 }

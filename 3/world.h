@@ -3,8 +3,7 @@
  *
  *       Filename:  world.h
  *
- *    Description:  Essentially this is the Entity Manager part of the total
- *    Entity Component System.
+ *    Description:  Defines World struct
  *
  *        Version:  1.0
  *        Created:  11/11/2013 12:14:28 AM
@@ -43,9 +42,8 @@ typedef struct world world;
 
 extern world *world_new(void);
 extern void world_free(world *);
-extern int world_create_entity(world *);
-extern void world_add_graphic_component(world *, int, char *);
-extern void world_remove_graphic_component(world *, int);
-extern void world_delete_entity(world *, int);
+extern int create_entity(world *);
+extern int create_entity_with_graphic(world *, char *);
+extern void delete_entity(world *, int);
 
 #endif

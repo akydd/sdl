@@ -15,12 +15,10 @@
  * =====================================================================================
  */
 #include <stdlib.h>
-#include <time.h>
 #include <SDL2/SDL.h>
 
 #include "world.h"
 #include "cache.h"
-#include "input_system.h"
 #include "renderer.h"
 
 int main(int argc, char **argv)
@@ -31,21 +29,22 @@ int main(int argc, char **argv)
 	cache *cache = cache_new();
 	// setup renderer
 	renderer *renderer = renderer_new();
+	// create game entity representing screen background graphic
+	int entity = create_entity_with_graphic(game_world, "image.bmp");
 
-	// main game loop
 	int quit = 0;
-	SDL_Event input_event;
+	SDL_Event event;
 	while(!quit) {
-		while(SDL_PollEvent(&input_event)) {
-			if(input_event.type == SDL_QUIT) {
+		while(SDL_PollEvent(&event) != 0) {
+			if (event.type == SDL_QUIT) {
 				quit = 1;
 			}
-			input_system_update(input_event, game_world);
 		}
 		renderer_render(renderer, game_world, cache);
 	}
 		
 	// tear down
+	delete_entity(game_world, entity);
 	renderer_free(renderer);
 	cache_free(&cache);
 	world_free(game_world);
