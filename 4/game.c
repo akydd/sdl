@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 	cache *cache = cache_new();
 	// setup renderer
 	renderer *renderer = renderer_new();
+	int entity = world_create_entity(game_world);
 
 	// main game loop
 	int quit = 0;
@@ -39,8 +40,9 @@ int main(int argc, char **argv)
 		while(SDL_PollEvent(&input_event)) {
 			if(input_event.type == SDL_QUIT) {
 				quit = 1;
+			} else {
+				input_system_update(input_event, game_world);
 			}
-			input_system_update(input_event, game_world);
 		}
 		renderer_render(renderer, game_world, cache);
 	}

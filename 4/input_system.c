@@ -29,23 +29,23 @@ void input_system_update(SDL_Event e, world *world) {
 		switch(e.key.keysym.sym)
 		{
 			case SDLK_UP:
-			world_add_graphic_component(world, new_entity, "up_arrow.jpg");
+			world_add_graphic_component(world, new_entity, "up_arrow.bmp");
 			break;
 
 			case SDLK_DOWN:
-			world_add_graphic_component(world, new_entity, "down_arrow.jpg");
+			world_add_graphic_component(world, new_entity, "down_arrow.bmp");
 			break;
 
 			case SDLK_LEFT:
-			world_add_graphic_component(world, new_entity, "left_arrow.jpg");
+			world_add_graphic_component(world, new_entity, "left_arrow.bmp");
 			break;
 
 			case SDLK_RIGHT:
-			world_add_graphic_component(world, new_entity, "right_arrow.jpg");
+			world_add_graphic_component(world, new_entity, "right_arrow.bmp");
 			break;
 
 			default:
-			world_add_graphic_component(world, new_entity, "any_key.jpg");
+			world_add_graphic_component(world, new_entity, "any_key.bmp");
 			break;
 		}
 	}
