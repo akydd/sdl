@@ -31,7 +31,6 @@ int main(int argc, char **argv)
 	cache *cache = cache_new();
 	// setup renderer
 	renderer *renderer = renderer_new();
-	int entity = world_create_entity(game_world);
 
 	// main game loop
 	int quit = 0;

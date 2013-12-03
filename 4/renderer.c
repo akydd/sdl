@@ -31,8 +31,9 @@ renderer *renderer_new() {
 	new_renderer = malloc(sizeof(renderer));
 
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &new_renderer->sdl_window, &new_renderer->sdl_renderer);
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
+	// No fancy scaleing for this tutorial
+	SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &new_renderer->sdl_window, &new_renderer->sdl_renderer);
+	// SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
 	// SDL_RenderSetLogicalSize(new_renderer->sdl_renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	return new_renderer;
@@ -47,11 +48,22 @@ void renderer_free(renderer *renderer) {
 }
 
 void renderer_render(renderer *renderer, world *world, cache *cache) {
-	// blit graphic componenets to the screen
 	for(int i = 0; i < MAX_ENTITY; i++) {
-		if ((world->mask[i] & GRAPHIC) == GRAPHIC) {
+		int mask = world->mask[i];
+		if ((mask & GRAPHIC) == GRAPHIC) {
 			(void)printf("Rendering entity %d with image %s\n", i, world->graphics[i].image_file);
-			SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[i].image_file), NULL, NULL);
+			// Get image size and position info, if present.  Else,
+			// image fills up entire screen.
+			if(((mask & POSITION) == POSITION) && ((mask & SIZE) == SIZE)) {
+				SDL_Rect rect;
+				rect.x = world->positions[i].x;
+				rect.y = world->positions[i].y;
+				rect.w = world->sizes[i].x;
+				rect.h = world->sizes[i].y;
+				SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[i].image_file), NULL, &rect);
+			} else {
+				SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[i].image_file), NULL, NULL);
+			}
 		}
 	}
 

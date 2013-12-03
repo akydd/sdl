@@ -19,6 +19,8 @@
 #define WORLD_H
 
 #include "graphic.h"
+#include "position.h"
+#include "size.h"
 
 #define MAX_ENTITY 20
 
@@ -27,7 +29,9 @@
  */
 typedef enum {
 	NONE = 0,
-	GRAPHIC = 1<<0
+	GRAPHIC = 1<<0,
+	POSITION = 1<<1,
+	SIZE = 1<<2
 } component_type;
 
 /*
@@ -37,15 +41,29 @@ typedef enum {
 struct world {
 	int mask[MAX_ENTITY];
 	graphic graphics[MAX_ENTITY];
+	position positions[MAX_ENTITY];
+	size sizes[MAX_ENTITY];
 };
 
 typedef struct world world;
 
 extern world *world_new(void);
 extern void world_free(world *);
+
+// Entity management
 extern int world_create_entity(world *);
+extern void world_delete_entity(world *, int);
+
+// Graphic component
 extern void world_add_graphic_component(world *, int, char *);
 extern void world_remove_graphic_component(world *, int);
-extern void world_delete_entity(world *, int);
+
+// Position component
+extern void world_add_position_component(world *, int, int, int);
+extern void world_remove_position_component(world *, int);
+
+// Size component
+extern void world_add_size_component(world *, int, int, int);
+extern void world_remove_size_component(world *, int);
 
 #endif

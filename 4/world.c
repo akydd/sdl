@@ -69,7 +69,33 @@ void world_remove_graphic_component(world *world, int entity_id) {
 	}
 }
 
+void world_add_position_component(world *world, int entity_id, int x, int y) {
+	world->mask[entity_id] |= POSITION;
+	world->positions[entity_id].x = x;
+	world->positions[entity_id].y = y;
+}
+
+void world_remove_position_component(world *world, int entity_id) {
+	if((world->mask[entity_id] | POSITION) == POSITION) {
+		world->mask[entity_id] &= ~(POSITION);
+	}
+}
+
+void world_add_size_component(world *world, int entity_id, int x, int y) {
+	world->mask[entity_id] |= SIZE;
+	world->sizes[entity_id].x = x;
+	world->sizes[entity_id].y = y;
+}
+
+void world_remove_size_component(world *world, int entity_id) {
+	if((world->mask[entity_id] | SIZE) == SIZE) {
+		world->mask[entity_id] &= ~(SIZE);
+	}
+}
+
 void world_delete_entity(world *world, int entity_id) {
+	// No need to remove position and size components, as they aren't
+	// malloced.
 	world_remove_graphic_component(world, entity_id);
 	world->mask[entity_id] = NONE;
 }
