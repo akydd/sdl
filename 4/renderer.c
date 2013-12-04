@@ -48,6 +48,10 @@ void renderer_free(renderer *renderer) {
 }
 
 void renderer_render(renderer *renderer, world *world, cache *cache) {
+	// Clear surface
+	SDL_RenderClear(renderer->sdl_renderer);
+
+	// RenderCopy legit surfaces
 	for(int i = 0; i < MAX_ENTITY; i++) {
 		int mask = world->mask[i];
 		if ((mask & GRAPHIC) == GRAPHIC) {

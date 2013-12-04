@@ -23,6 +23,7 @@
 
 void input_system_update(SDL_Event e, world *world) {
 	if(e.type == SDL_KEYDOWN) {
+		world_delete_all_entities(world);
 		int new_entity = world_create_entity(world);
 		(void)printf("New entity %d\n", new_entity);
 

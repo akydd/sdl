@@ -53,6 +53,7 @@ extern void world_free(world *);
 // Entity management
 extern int world_create_entity(world *);
 extern void world_delete_entity(world *, int);
+extern void world_delete_all_entities(world *);
 
 // Graphic component
 extern void world_add_graphic_component(world *, int, char *);

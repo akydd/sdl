@@ -34,9 +34,7 @@ world *world_new(void) {
 }
 
 void world_free(world *world) {
-	for(int i = 0; i < MAX_ENTITY; i++) {
-		world_delete_entity(world, i);
-	}
+	world_delete_all_entities(world);
 	free(world);
 	world = NULL;
 }
@@ -98,4 +96,12 @@ void world_delete_entity(world *world, int entity_id) {
 	// malloced.
 	world_remove_graphic_component(world, entity_id);
 	world->mask[entity_id] = NONE;
+}
+
+void world_delete_all_entities(world *world) {
+	for(int id = 0; id < MAX_ENTITY; id++) {
+		if (world->mask[id] != NONE) {
+			world_delete_entity(world, id);
+		}
+	}
 }
