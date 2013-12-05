@@ -1,4 +1,4 @@
-# Optimizes Surface Loading and SOft Stretching
+# Optimized Surface Loading and SOft Stretching
 
 This lesson was skipped.  As far as I can tell, using SDL\_Textures with
 SDL\_CreateWindowAndRenderer instead of SDL\_Surfaces always produces a display
