@@ -105,6 +105,20 @@ void world_remove_color_component(world *world, int entity_id) {
 	}
 }
 
+void world_add_outline_color_component(world *world, int entity_id, int r, int g, int b, int a) {
+	world->mask[entity_id] |= OUTLINE_COLOR;
+	world->outline_colors[entity_id].r = r;
+	world->outline_colors[entity_id].g = g;
+	world->outline_colors[entity_id].b = b;
+	world->outline_colors[entity_id].a = a;
+}
+
+void world_remove_outline_color_component(world *world, int entity_id) {
+	if((world->mask[entity_id] | OUTLINE_COLOR) == OUTLINE_COLOR) {
+		world->mask[entity_id] &= ~(OUTLINE_COLOR);
+	}
+}
+
 void world_add_point_component(world *world, int entity_id) {
 	world->mask[entity_id] |= POINT;
 }
@@ -126,6 +140,16 @@ void world_add_line_component(world *world, int entity_id, int x1, int y1, int x
 void world_remove_line_component(world *world, int entity_id) {
 	if((world->mask[entity_id] | LINE) == LINE) {
 		world->mask[entity_id] &= ~(LINE);
+	}
+}
+
+void world_add_rectangle_component(world *world, int entity_id) {
+	world->mask[entity_id] |= RECT;
+}
+
+void world_remove_rectangle_component(world *world, int entity_id) {
+	if((world->mask[entity_id] | RECT) == RECT) {
+		world->mask[entity_id] &= ~(RECT);
 	}
 }
 

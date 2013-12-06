@@ -64,6 +64,20 @@ void input_system_update(SDL_Event e, world *world) {
 			world_add_color_component(world, new_entity, 0x00, 0x00, 0xFF, 0xFF);
 			break;
 
+			case SDLK_o:
+			world_add_rectangle_component(world, new_entity);
+			world_add_size_component(world, new_entity, 320, 240);
+			world_add_position_component(world, new_entity, 480, 360);
+			world_add_outline_color_component(world, new_entity, 0x00, 0xFF, 0x00, 0xFF);
+			break;
+
+			case SDLK_f:
+			world_add_rectangle_component(world, new_entity);
+			world_add_size_component(world, new_entity, 180, 120);
+			world_add_position_component(world, new_entity, 240, 180);
+			world_add_color_component(world, new_entity, 0xFF, 0x00, 0x00, 0xFF);
+			break;
+
 			default:
 			world_add_graphic_component(world, new_entity, "any_key.png");
 			world_add_size_component(world, new_entity, 100, 100);

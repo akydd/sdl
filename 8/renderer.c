@@ -29,6 +29,7 @@ struct renderer {
 void render_graphic(renderer *renderer, world *world, cache *cache, int id, int mask);
 void render_point(renderer *renderer, world *world, int id);
 void render_line(renderer *renderer, world *world, int id);
+void render_rectangle(renderer *renderer, world *world, int id, int mask);
 
 renderer *renderer_new() {
 	renderer *new_renderer;
@@ -65,6 +66,8 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 			render_point(renderer, world, i);
 		} else if (((mask & LINE) == LINE) && ((mask & COLOR) == COLOR)) {
 			render_line(renderer, world, i);
+		} else if (((mask & RECT) == RECT) && ((mask & POSITION) == POSITION)) {
+			render_rectangle(renderer, world, i, mask);
 		}
 	}
 
@@ -104,4 +107,22 @@ void render_line(renderer *renderer, world *world, int id) {
 
 	SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawLine(renderer->sdl_renderer, line.x1, line.y1, line.x2, line.y2);
+}
+
+void render_rectangle(renderer *renderer, world *world, int id, int mask) {
+	size size = world->sizes[id];
+	position pos = world->positions[id];
+	SDL_Rect rect = {pos.x - size.x/2, pos.x + size.x/2, pos.y - size.y/2, pos.y + size.y/2};
+
+	// Need to handle cases when rectangle has fill and outline
+	if ((mask & COLOR) == COLOR) {
+		color color = world->colors[id];
+		SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
+		SDL_RenderFillRect(renderer->sdl_renderer, &rect);
+	}
+	if ((mask & OUTLINE_COLOR) == OUTLINE_COLOR) {
+		color color = world->outline_colors[id];
+		SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
+		SDL_RenderDrawRect(renderer->sdl_renderer, &rect);
+	}
 }

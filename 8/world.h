@@ -37,8 +37,8 @@ typedef enum {
 	POINT = 1<<3,
 	LINE = 1<<4,
 	RECT = 1<<5,
-	FILL_RECT = 1<<6,
-	COLOR = 1<<7
+	COLOR = 1<<6,
+	OUTLINE_COLOR = 1<<7
 } component_type;
 
 /*
@@ -52,6 +52,7 @@ struct world {
 	size sizes[MAX_ENTITY];
 	line lines[MAX_ENTITY];
 	color colors[MAX_ENTITY];
+	color outline_colors[MAX_ENTITY];
 };
 
 typedef struct world world;
@@ -80,6 +81,10 @@ extern void world_remove_size_component(world *, int);
 extern void world_add_color_component(world *, int, int, int, int, int);
 extern void world_remove_color_component(world *, int);
 
+// Outline Color component
+extern void world_add_outline_color_component(world *, int, int, int, int, int);
+extern void world_remove_outline_color_component(world *, int);
+
 // Point component
 extern void world_add_point_component(world *, int);
 extern void world_remove_point_component(world *, int);
@@ -87,4 +92,9 @@ extern void world_remove_point_component(world *, int);
 // Line component
 extern void world_add_line_component(world *, int, int, int, int, int);
 extern void world_remove_line_component(world *, int);
+
+// Rectangle component
+extern void world_add_rectangle_component(world *, int);
+extern void world_remove_rectangle_component(world *, int);
+
 #endif
