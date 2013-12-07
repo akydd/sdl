@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	// setup renderer
 	renderer *renderer = renderer_new();
 	// create game entity representing screen background graphic
-	int entity = create_entity_with_graphic(game_world, "image.bmp");
+	int entity = create_entity_with_graphic(game_world, "../images/image.bmp");
 
 	// main loop isn't actually a loop, and doesn't depend on SDL. But it
 	// depends on unistd.h.

@@ -1,4 +1,4 @@
-# Getting an Image on the Screen
+# Event Driven Programming
 
 ## Changes
 No changes other than those previously mentioned in tutorial 2.

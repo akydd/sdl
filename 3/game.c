@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	// setup renderer
 	renderer *renderer = renderer_new();
 	// create game entity representing screen background graphic
-	int entity = create_entity_with_graphic(game_world, "image.bmp");
+	int entity = create_entity_with_graphic(game_world, "../images/image.bmp");
 
 	int quit = 0;
 	SDL_Event event;
