@@ -112,15 +112,17 @@ void render_line(renderer *renderer, world *world, int id) {
 void render_rectangle(renderer *renderer, world *world, int id, int mask) {
 	size size = world->sizes[id];
 	position pos = world->positions[id];
-	SDL_Rect rect = {pos.x - size.x/2, pos.x + size.x/2, pos.y - size.y/2, pos.y + size.y/2};
+	SDL_Rect rect = {pos.x - size.x/2, pos.y - size.y/2, size.x, size.y};
 
 	// Need to handle cases when rectangle has fill and outline
 	if ((mask & COLOR) == COLOR) {
+		(void)printf("Rendering filled rect %d\n", id);
 		color color = world->colors[id];
 		SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
 		SDL_RenderFillRect(renderer->sdl_renderer, &rect);
 	}
 	if ((mask & OUTLINE_COLOR) == OUTLINE_COLOR) {
+		(void)printf("Rendering outline rect %d\n", id);
 		color color = world->outline_colors[id];
 		SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
 		SDL_RenderDrawRect(renderer->sdl_renderer, &rect);
