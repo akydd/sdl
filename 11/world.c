@@ -57,6 +57,7 @@ void world_add_graphic_component(world *world, int entity_id, char *imagefile) {
 }
 
 void world_remove_graphic_component(world *world, int entity_id) {
+	// we check that the bit is set here so that we know when to call free
 	if((world->mask[entity_id] | GRAPHIC) == GRAPHIC) {
 		// free graphic component data, if any, and unmask
 		if (world->graphics[entity_id].image_file != NULL) {
@@ -74,9 +75,7 @@ void world_add_position_component(world *world, int entity_id, int x, int y) {
 }
 
 void world_remove_position_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | POSITION) == POSITION) {
-		world->mask[entity_id] &= ~(POSITION);
-	}
+	world->mask[entity_id] &= ~(POSITION);
 }
 
 void world_add_size_component(world *world, int entity_id, int x, int y) {
@@ -86,9 +85,7 @@ void world_add_size_component(world *world, int entity_id, int x, int y) {
 }
 
 void world_remove_size_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | SIZE) == SIZE) {
-		world->mask[entity_id] &= ~(SIZE);
-	}
+	world->mask[entity_id] &= ~(SIZE);
 }
 
 void world_add_color_component(world *world, int entity_id, int r, int g, int b, int a) {
@@ -100,9 +97,7 @@ void world_add_color_component(world *world, int entity_id, int r, int g, int b,
 }
 
 void world_remove_color_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | COLOR) == COLOR) {
-		world->mask[entity_id] &= ~(COLOR);
-	}
+	world->mask[entity_id] &= ~(COLOR);
 }
 
 void world_add_outline_color_component(world *world, int entity_id, int r, int g, int b, int a) {
@@ -114,9 +109,7 @@ void world_add_outline_color_component(world *world, int entity_id, int r, int g
 }
 
 void world_remove_outline_color_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | OUTLINE_COLOR) == OUTLINE_COLOR) {
-		world->mask[entity_id] &= ~(OUTLINE_COLOR);
-	}
+	world->mask[entity_id] &= ~(OUTLINE_COLOR);
 }
 
 void world_add_point_component(world *world, int entity_id) {
@@ -124,9 +117,7 @@ void world_add_point_component(world *world, int entity_id) {
 }
 
 void world_remove_point_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | POINT) == POINT) {
-		world->mask[entity_id] &= ~(POINT);
-	}
+	world->mask[entity_id] &= ~(POINT);
 }
 
 void world_add_line_component(world *world, int entity_id, int x1, int y1, int x2, int y2) {
@@ -138,9 +129,7 @@ void world_add_line_component(world *world, int entity_id, int x1, int y1, int x
 }
 
 void world_remove_line_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | LINE) == LINE) {
-		world->mask[entity_id] &= ~(LINE);
-	}
+	world->mask[entity_id] &= ~(LINE);
 }
 
 void world_add_rectangle_component(world *world, int entity_id) {
@@ -148,9 +137,19 @@ void world_add_rectangle_component(world *world, int entity_id) {
 }
 
 void world_remove_rectangle_component(world *world, int entity_id) {
-	if((world->mask[entity_id] | RECT) == RECT) {
-		world->mask[entity_id] &= ~(RECT);
-	}
+	world->mask[entity_id] &= ~(RECT);
+}
+
+void world_add_sprite_component(world *world, int entity_id, int x, int y, int w, int h) {
+	world->mask[entity_id] |= SPRITE;
+	world->sprites[entity_id].x = x;
+	world->sprites[entity_id].y = y;
+	world->sprites[entity_id].w = w;
+	world->sprites[entity_id].h = h;
+}
+
+void world_remove_sprite_component(world *world, int entity_id) {
+	world->mask[entity_id] &= ~(SPRITE);
 }
 
 void world_delete_entity(world *world, int entity_id) {

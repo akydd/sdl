@@ -2,7 +2,7 @@
 
 ## Changes
 Sprite is loaded as one large texture in cache to save memory.  All image
-rendering is done via the sprite sheet now, instead of through individual files.
+rendering for this example is done via the sprite sheet now, instead of through individual image files.
 
 ## Entity Component System
 In our implementation, each key press destroys all existing entities and creates

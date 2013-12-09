@@ -77,18 +77,27 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 
 void render_graphic(renderer *renderer, world *world, cache *cache, int id, int mask) {
 	(void)printf("Rendering graphic %d with image %s\n", id, world->graphics[id].image_file);
-	// Get image size and position info, if present.  Else,
-	// image fills up entire screen.
+	SDL_Rect *size_ptr = NULL;
+	SDL_Rect size;
+	SDL_Rect *source_ptr = NULL;
+	SDL_Rect source;
+	// Get image size and position info, if present.
 	if(((mask & POSITION) == POSITION) && ((mask & SIZE) == SIZE)) {
-		SDL_Rect rect;
-		rect.x = world->positions[id].x;
-		rect.y = world->positions[id].y;
-		rect.w = world->sizes[id].x;
-		rect.h = world->sizes[id].y;
-		SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[id].image_file), NULL, &rect);
-	} else {
-		SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[id].image_file), NULL, NULL);
+		size.x = world->positions[id].x;
+		size.y = world->positions[id].y;
+		size.w = world->sizes[id].x;
+		size.h = world->sizes[id].y;
+		size_ptr = &size;
 	}
+	// Get sprite info, if present
+	if((mask & SPRITE) == SPRITE) {
+		source.x = world->sprites[id].x;
+		source.y = world->sprites[id].y;
+		source.w = world->sprites[id].w;
+		source.h = world->sprites[id].h;
+		source_ptr = &source;
+	}
+	SDL_RenderCopy(renderer->sdl_renderer, cache_get(&cache, renderer->sdl_renderer, world->graphics[id].image_file), source_ptr, size_ptr);
 }
 
 void render_point(renderer *renderer, world *world, int id) {
