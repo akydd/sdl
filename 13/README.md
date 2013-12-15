@@ -9,10 +9,12 @@ In our implementation, certain key presses destroy all existing entities and cre
 a new one.  This could be modified to create a single entity upon first
 keypress, updating it with subsequent keypresses.
 
-Keypresses of r, g, or b add color modulation to the current entity with a
+Keypresses of 'r', 'g', or 'b' add color modulation to the current entity with a
 graphic component that is already rendered to the screen, subtracting 32 from
-the r, g, or b channel respectively, wrapping around if the number becomes
+the red, green, or blue channel respectively, wrapping around if the number becomes
 negative.
+
+Keypress of 'a' done a similar thing for the alpha channel.
 
 ### Entities
 An entity is simply an integer, which indexes into the entities' components and
