@@ -58,6 +58,7 @@ struct world {
 	color colors[MAX_ENTITY];
 	color outline_colors[MAX_ENTITY];
 	sprite sprites[MAX_ENTITY];
+	animated_sprite animated_sprites[MAX_ENTITY];
 };
 
 typedef struct world world;
@@ -107,7 +108,7 @@ extern void world_add_sprite_component(world *, int, int, int, int, int);
 extern void world_remove_sprite_component(world *, int);
 
 // Animated sprite component
-extern void world_add_animated_sprite_component(world *, int, char *, sprite, ...);
+extern void world_add_animated_sprite_component(world *, int, char *, int, ...);
 extern void world_remove_animated_sprite_component(world *, int);
 
 #endif

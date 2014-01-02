@@ -20,7 +20,7 @@
 
 typedef struct {
 	// Contains the filename of the spritesheet
-	graphic graphic;
+	char *image_file;
 	// A variable sized array of sprite structs
 	sprite *sprites;
 } animated_sprite;

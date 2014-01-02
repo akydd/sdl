@@ -16,6 +16,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "world.h"
 
@@ -152,10 +153,45 @@ void world_remove_sprite_component(world *world, int entity_id) {
 	world->mask[entity_id] &= ~(SPRITE);
 }
 
+void world_add_animated_sprite_component(world *world, int entity_id, char *imagefile, int num_frames, ...) {
+	va_list sprite_list;
+	va_start(sprite_list, num_frames);
+
+	world->mask[entity_id] |= ANIMATED_SPRITE;
+	// Copy imagefile string into animated_sprite struct
+	world->animated_sprites[entity_id].image_file = malloc(strlen(imagefile) + 1);
+	(void)strcpy(world->animated_sprites[entity_id].image_file, imagefile);
+
+	// Copy sprites into animated_sprite struct as array of sprites
+	world->animated_sprites[entity_id].sprites = malloc(num_frames * sizeof(sprite));
+	for(int i = 0; i < num_frames; i++) {
+		world->animated_sprites[entity_id].sprites[i] = va_arg(sprite_list, sprite);
+	}
+	va_end(sprite_list);
+}
+
+void world_remove_animated_sprite_component(world *world, int entity_id) {
+	// we check that the bit is set here so that we know when to call free
+	if((world->mask[entity_id] | ANIMATED_SPRITE) == ANIMATED_SPRITE) {
+		// free image file name
+		if (world->animated_sprites[entity_id].image_file != NULL) {
+			free(world->animated_sprites[entity_id].image_file);
+			world->animated_sprites[entity_id].image_file = NULL;
+		}
+		// free sprite array
+		if (world->animated_sprites[entity_id].sprites != NULL) {
+			free(world->animated_sprites[entity_id].sprites);
+			world->animated_sprites[entity_id].sprites = NULL;
+		}
+		world->mask[entity_id] &= ~(ANIMATED_SPRITE);
+	}
+}
+
 void world_delete_entity(world *world, int entity_id) {
-	// No need to remove other components, as they aren't
+	// Delete these components just in case, as they contain memory that is
 	// malloced.
 	world_remove_graphic_component(world, entity_id);
+	world_remove_animated_sprite_component(world, entity_id);
 	world->mask[entity_id] = NONE;
 }
 
