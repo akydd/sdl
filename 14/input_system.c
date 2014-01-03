@@ -144,6 +144,18 @@ void input_system_update(SDL_Event e, world *world) {
 			}
 			break;
 
+			case SDLK_s:
+			world_delete_all_entities(world);
+			new_entity = world_create_entity(world);
+			sprite frame1 = {0, 0, 64, 205};
+			sprite frame2 = {64, 0, 64, 205};
+			sprite frame3 = {128, 0, 64, 205};
+			sprite frame4 = {196, 0, 64, 205};
+			world_add_animated_sprite_component(world, new_entity, "../images/foo.png", 4, frame1, frame2, frame3, frame4);
+			world_add_size_component(world, new_entity, 64, 205);
+			world_add_position_component(world, new_entity, 270, 196);
+			break;
+
 			default:
 			world_delete_all_entities(world);
 			new_entity = world_create_entity(world);

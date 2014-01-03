@@ -15,6 +15,8 @@ negative.
 
 Keypress of 'a' done a similar thing for the alpha channel.
 
+Keypress of 's' displays the animated walking sprite.
+
 ### Entities
 An entity is simply an integer, which indexes into the entities' components and
 mask field.  The mask field tracks which components are attached to the
@@ -39,7 +41,9 @@ Holds the info needed to pull an image out from a sprite sheet (coordinates,
 height and width).  Needs to be used together with the Graphic component to
 identify the sprite sheet file.
 #### Animated Sprite
-Holds the info needed to pull the animation frames from a sprite sheet.
+Holds the info needed to pull the animation frames from a sprite sheet.  This
+includes filename, number of frames for the animation, and locations and sizes
+of each of the frames.
 
 ### Systems
 #### Entity Manager System (world.c)

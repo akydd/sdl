@@ -30,6 +30,7 @@ void render_graphic(renderer *renderer, world *world, cache *cache, int id);
 void render_point(renderer *renderer, world *world, int id);
 void render_line(renderer *renderer, world *world, int id);
 void render_rectangle(renderer *renderer, world *world, int id);
+void render_animated_sprite(renderer *renderer, world *world, cache *cache, int id);
 
 renderer *renderer_new() {
 	renderer *new_renderer;
@@ -68,6 +69,8 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 			render_line(renderer, world, i);
 		} else if (((mask & RECT) == RECT) && ((mask & POSITION) == POSITION)) {
 			render_rectangle(renderer, world, i);
+		} else if ((mask & ANIMATED_SPRITE) == ANIMATED_SPRITE) {
+			render_animated_sprite(renderer, world, cache, i);
 		}
 	}
 
@@ -99,6 +102,52 @@ void render_graphic(renderer *renderer, world *world, cache *cache, int id) {
 		source.h = world->sprites[id].h;
 		source_ptr = &source;
 	}
+	// Apply color and alpha mods, if present
+	if((mask & COLOR) == COLOR) {
+		SDL_SetTextureColorMod(texture, world->colors[id].r, world->colors[id].g, world->colors[id].b);
+		// set alpha if less than 255
+		if (world->colors[id].a != 255) {
+			SDL_SetTextureAlphaMod(texture, world->colors[id].a);
+		}
+	}
+	SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+}
+
+
+void render_animated_sprite(renderer *renderer, world *world, cache *cache, int id) {
+	(void)printf("Rendering animated sprite %d with image %s\n", id, world->animated_sprites[id].image_file);
+	int mask = world->mask[id];
+	SDL_Texture *texture = cache_get(&cache, renderer->sdl_renderer, world->animated_sprites[id].image_file);
+	SDL_Rect *size_ptr = NULL;
+	SDL_Rect size;
+	SDL_Rect *source_ptr = NULL;
+	SDL_Rect source;
+
+	// Get image size and position info, if present.
+	if(((mask & POSITION) == POSITION) && ((mask & SIZE) == SIZE)) {
+		size.x = world->positions[id].x;
+		size.y = world->positions[id].y;
+		size.w = world->sizes[id].x;
+		size.h = world->sizes[id].y;
+		size_ptr = &size;
+	}
+
+	// Get current frame
+	int current_frame = world->animated_sprites[id].current_frame;
+	source.x = world->animated_sprites[id].sprites[current_frame].x;
+	source.y = world->animated_sprites[id].sprites[current_frame].y;
+	source.w = world->animated_sprites[id].sprites[current_frame].w;
+	source.h = world->animated_sprites[id].sprites[current_frame].h;
+	source_ptr = &source;
+
+	// set next frame
+	int max_frame = world->animated_sprites[id].num_frames;
+	current_frame++;
+	if (current_frame >= max_frame) {
+		current_frame -= max_frame;
+	}
+	world->animated_sprites[id].current_frame = current_frame;
+
 	// Apply color and alpha mods, if present
 	if((mask & COLOR) == COLOR) {
 		SDL_SetTextureColorMod(texture, world->colors[id].r, world->colors[id].g, world->colors[id].b);

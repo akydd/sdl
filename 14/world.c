@@ -168,6 +168,10 @@ void world_add_animated_sprite_component(world *world, int entity_id, char *imag
 		world->animated_sprites[entity_id].sprites[i] = va_arg(sprite_list, sprite);
 	}
 	va_end(sprite_list);
+
+	// initialize frame data
+	world->animated_sprites[entity_id].num_frames = num_frames;
+	world->animated_sprites[entity_id].current_frame = 0;
 }
 
 void world_remove_animated_sprite_component(world *world, int entity_id) {

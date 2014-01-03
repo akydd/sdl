@@ -23,6 +23,10 @@ typedef struct {
 	char *image_file;
 	// A variable sized array of sprite structs
 	sprite *sprites;
+	// The total number of frames
+	int num_frames;
+	// Current frame
+	int current_frame;
 } animated_sprite;
 
 #endif
