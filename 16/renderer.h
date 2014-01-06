@@ -19,6 +19,7 @@
 
 #include "world.h"
 #include "cache.h"
+#include "font_cache.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -27,6 +28,6 @@ typedef struct renderer renderer;
 
 extern renderer *renderer_new();
 extern void renderer_free(renderer *);
-extern void renderer_render(renderer *, world *, cache *);
+extern void renderer_render(renderer *, world *, cache *, font_cache *);
 
 #endif

@@ -23,5 +23,24 @@
 struct font_cache {
 	char *key;
 	TTF_Font *value;
-	struct cache *next;
+	struct font_cache *next;
 };
+
+font_cache *font_cache_new(void)
+{
+	TTF_Init();
+	return NULL;
+}
+
+void font_cache_free(font_cache **the_cache)
+{
+	while(*the_cache != NULL) {
+		font_cache *tmp_ptr = *the_cache;
+		*the_cache = tmp_ptr->next;
+
+		free(tmp_ptr->key);
+		TTF_CloseFont(tmp_ptr->value);
+		free(tmp_ptr);
+	}
+	TTF_Quit();
+}

@@ -21,6 +21,7 @@
 
 #include "renderer.h"
 #include "cache.h"
+#include "font_cache.h"
 
 struct renderer {
 	SDL_Window *sdl_window;
@@ -32,6 +33,7 @@ void render_point(renderer *renderer, world *world, int id);
 void render_line(renderer *renderer, world *world, int id);
 void render_rectangle(renderer *renderer, world *world, int id);
 void render_animated_sprite(renderer *renderer, world *world, cache *cache, int id);
+void render_text(renderer *renderer, world *world, font_cache *font_cache, int id);
 
 
 renderer *renderer_new() {
@@ -55,7 +57,7 @@ void renderer_free(renderer *renderer) {
 	free(renderer);
 }
 
-void renderer_render(renderer *renderer, world *world, cache *cache) {
+void renderer_render(renderer *renderer, world *world, cache *cache, font_cache *font_cache) {
 	// Clear surface to black
 	SDL_SetRenderDrawColor(renderer->sdl_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer->sdl_renderer);
@@ -73,6 +75,8 @@ void renderer_render(renderer *renderer, world *world, cache *cache) {
 			render_rectangle(renderer, world, i);
 		} else if ((mask & ANIMATED_SPRITE) == ANIMATED_SPRITE) {
 			render_animated_sprite(renderer, world, cache, i);
+		} else if ((mask & TEXT) == TEXT) {
+			render_text(renderer, world, font_cache, i);
 		}
 	}
 
@@ -204,4 +208,8 @@ void render_rectangle(renderer *renderer, world *world, int id) {
 		SDL_SetRenderDrawColor(renderer->sdl_renderer, color.r, color.g, color.b, color.a);
 		SDL_RenderDrawRect(renderer->sdl_renderer, &rect);
 	}
+}
+
+void render_text(renderer *renderer, world *world, font_cache *font_cache, int id) {
+	// TODO
 }

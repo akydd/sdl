@@ -26,6 +26,7 @@
 #include "sprite.h"
 #include "animated_sprite.h"
 #include "rotation.h"
+#include "text.h"
 
 #define MAX_ENTITY 20
 
@@ -44,7 +45,8 @@ typedef enum {
 	OUTLINE_COLOR = 1<<7,
 	SPRITE = 1<<8,
 	ANIMATED_SPRITE = 1<<9,
-	ROTATION = 1<<10
+	ROTATION = 1<<10,
+	TEXT = 1<<11
 } component_type;
 
 /*
@@ -62,6 +64,7 @@ struct world {
 	sprite sprites[MAX_ENTITY];
 	animated_sprite animated_sprites[MAX_ENTITY];
 	rotation rotations[MAX_ENTITY];
+	text texts[MAX_ENTITY];
 };
 
 typedef struct world world;
@@ -117,5 +120,9 @@ extern void world_remove_animated_sprite_component(world *, int);
 // Rotation component
 extern void world_add_rotation_component(world *, int, double, int, int, int);
 extern void world_remove_rotation_component(world *, int);
+
+// Text component
+extern void world_add_text_component(world *, int, char *, char *, int, int);
+extern void world_remove_text_component(world *, int);
 
 #endif

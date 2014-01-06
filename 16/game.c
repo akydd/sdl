@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 				input_system_update(input_event, game_world);
 			}
 		}
-		renderer_render(renderer, game_world, cache);
+		renderer_render(renderer, game_world, cache, font_cache);
 	}
 		
 	// tear down
