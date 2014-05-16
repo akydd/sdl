@@ -16,12 +16,18 @@
  */
 #include <stdlib.h>
 #include <string.h>
+
 #include <SDL2/SDL_ttf.h>
 
 #include "font_cache.h"
 
+struct font_cache_key {
+    char *filename;
+    int size;
+};
+
 struct font_cache {
-	char *key;
+    struct font_cache_key key;
 	TTF_Font *value;
 	struct font_cache *next;
 };
@@ -38,9 +44,23 @@ void font_cache_free(font_cache **the_cache)
 		font_cache *tmp_ptr = *the_cache;
 		*the_cache = tmp_ptr->next;
 
+		free(tmp_ptr->key->filename);
 		free(tmp_ptr->key);
 		TTF_CloseFont(tmp_ptr->value);
 		free(tmp_ptr);
 	}
 	TTF_Quit();
+}
+
+int equal(font_cache_key key1, font_cache_key key2)
+{
+    if (key1.size != key2.size) {
+        return 0;
+    }
+
+    if (strcmp(key1.filename, key2.filename) != 0) {
+        return 0;
+    }
+
+    return 1;
 }

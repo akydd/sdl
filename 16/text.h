@@ -26,6 +26,13 @@ typedef struct {
 	// The last 4 can be combined using bitwise OR.  ORing normal with any other
 	// style will override.
 	int style;
+    // Updated: 0 = no, 1 = yes.  When updated == 1, the renderer should
+    // re-render the graphic, clearing out the existing cached surface and
+    // replacing it with an updated one.
+    int updated;
 } text;
+
+void update_text(struct text *, char *, int, int);
+void append_text(struct text *, char);
 
 #endif
