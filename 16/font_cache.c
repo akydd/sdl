@@ -52,6 +52,11 @@ void font_cache_free(font_cache **the_cache)
 	TTF_Quit();
 }
 
+TTF_Font *font_cache_get(font_cache **the_cache, const char *font, const int size)
+{
+
+}
+
 int equal(font_cache_key key1, font_cache_key key2)
 {
     if (key1.size != key2.size) {

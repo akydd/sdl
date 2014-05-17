@@ -50,11 +50,10 @@ int world_create_entity(world *world) {
 }
 
 void world_add_graphic_component(world *world, int entity_id, char *imagefile) {
-	// Allocate memory for imagefile string & copy into graphic struct
-	world->graphics[entity_id].image_file = malloc(strlen(imagefile) + 1);
-	(void)strcpy(world->graphics[entity_id].image_file, imagefile);
-	// set new mask
 	world->mask[entity_id] |= GRAPHIC;
+	// Allocate memory for imagefile string & copy into graphic struct
+	world->graphics[entity_id].image_file = malloc(sizeof(char) * (strlen(imagefile) + 1));
+	(void)strcpy(world->graphics[entity_id].image_file, imagefile);
 }
 
 void world_remove_graphic_component(world *world, int entity_id) {
@@ -159,7 +158,7 @@ void world_add_animated_sprite_component(world *world, int entity_id, char *imag
 
 	world->mask[entity_id] |= ANIMATED_SPRITE;
 	// Copy imagefile string into animated_sprite struct
-	world->animated_sprites[entity_id].image_file = malloc(strlen(imagefile) + 1);
+	world->animated_sprites[entity_id].image_file = malloc(sizeof(char) * (strlen(imagefile) + 1));
 	(void)strcpy(world->animated_sprites[entity_id].image_file, imagefile);
 
 	// Copy sprites into animated_sprite struct as array of sprites
@@ -203,11 +202,38 @@ void world_remove_rotation_component(world *world, int entity_id) {
 	world->mask[entity_id] &= ~(ROTATION);
 }
 
+void world_add_text_component(world *world, int entity_id, char *font, char *text, int size, int style, int r, int g, int b) {
+    world->mask[entity_id] |= TEXT;
+    world->text[entity_id].text = (char *)malloc(sizeof(char) * (strlen(text) + 1));
+    world->text[entity_id].font = (char *)malloc(sizeof(char) * (strlen(font) + 1));
+    world->text[entity_id].size = size;
+    world->text[entity_id].style = style;
+    world->text[entity_id].r = r;
+    world->text[entity_id].g = g;
+    world->text[entity_id].b = b;
+}
+
+void world_remove_text_component(world *world, int entity_id) {
+    if ((world->mask[entity_id] | TEXT) == TEXT) {
+        if (world->text[entity_id].text != NULL) {
+            free(world->text[entity_id].text);
+            world->text[entity_id].text = NULL;
+        }
+
+        if (world->text[entity_id].font != NULL) {
+            free(world->text[entity_id].font);
+            world->text[entity_id].font = NULL;
+        }
+        world->mask[entity_id] &= ~(TEXT);
+    }
+}
+
 void world_delete_entity(world *world, int entity_id) {
 	// Delete these components just in case, as they contain memory that is
 	// malloced.
 	world_remove_graphic_component(world, entity_id);
 	world_remove_animated_sprite_component(world, entity_id);
+    world_remove_text_component(world, entity_id);
 	world->mask[entity_id] = NONE;
 }
 
