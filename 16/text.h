@@ -29,6 +29,7 @@ typedef struct {
     int r;
     int g;
     int b;
+    int a;
 } text;
 
 extern void set_text(struct text *, char *);

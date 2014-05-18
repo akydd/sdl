@@ -122,7 +122,7 @@ extern void world_add_rotation_component(world *, int, double, int, int, int);
 extern void world_remove_rotation_component(world *, int);
 
 // Text component
-extern void world_add_text_component(world *, int, char *, char *, int, int, int, int, int);
+extern void world_add_text_component(world *, int, char *, char *, int, int, int, int, int, int);
 extern void world_remove_text_component(world *, int);
 
 #endif

@@ -44,28 +44,45 @@ void font_cache_free(font_cache **the_cache)
 		font_cache *tmp_ptr = *the_cache;
 		*the_cache = tmp_ptr->next;
 
-		free(tmp_ptr->key->filename);
-		free(tmp_ptr->key);
+		free(tmp_ptr->key.filename);
 		TTF_CloseFont(tmp_ptr->value);
 		free(tmp_ptr);
 	}
 	TTF_Quit();
 }
 
-TTF_Font *font_cache_get(font_cache **the_cache, const char *font, const int size)
+int equal(const char *filename, const int size, struct font_cache_key key)
 {
-
-}
-
-int equal(font_cache_key key1, font_cache_key key2)
-{
-    if (key1.size != key2.size) {
+    if (size != key.size) {
         return 0;
     }
 
-    if (strcmp(key1.filename, key2.filename) != 0) {
+    if (strcmp(filename, key.filename) != 0) {
         return 0;
     }
 
     return 1;
 }
+
+TTF_Font *font_cache_get(font_cache **the_cache, const char *font, const int size)
+{
+    // search for existing font in cache
+    for (font_cache *search_ptr = *the_cache; search_ptr; search_ptr = search_ptr->next) {
+        if (equal(font, size, search_ptr->key) == 0) {
+            return search_ptr->value;
+        }
+    }
+
+    // store new entry in cache and return it
+    font_cache *new_entry = malloc(sizeof(font_cache));
+    new_entry->key.filename = malloc(sizeof(char) * (strlen(font) + 1));
+    (void)strcpy(new_entry->key.filename, font);
+    new_entry->key.size = size;
+    new_entry->value = TTF_OpenFont(font, size);
+
+    new_entry->next = *the_cache;
+    *the_cache = new_entry;
+
+    return new_entry->value;
+}
+

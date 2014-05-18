@@ -211,5 +211,21 @@ void render_rectangle(renderer *renderer, world *world, int id) {
 }
 
 void render_text(renderer *renderer, world *world, font_cache *font_cache, int id) {
-	// TODO
+    int mask = world->mask[id];
+    text txt = world->texts[id];
+    TTF_Font *font = font_cache_get(&font_cache, txt.font, txt.size);
+    SDL_Color color = {txt.r, txt.g, txt.b, txt.a};
+    SDL_Surface *text_surface = TTF_RenderText_Solid(font, txt.text, color);
+    SDL_Texture *texture = SDL_CreateTexttureFromSurface(renderer->sdl_renderer, text_surface);
+    SDL_FreeSurface(text_surface);
+
+	// Render with rotation, if present
+	if((mask & ROTATION) == ROTATION) {
+		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
+		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
+	} else {
+		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+	}
+
+    SDL_DestroyTexture(texture);
 }
