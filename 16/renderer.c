@@ -212,19 +212,36 @@ void render_rectangle(renderer *renderer, world *world, int id) {
 
 void render_text(renderer *renderer, world *world, font_cache *font_cache, int id) {
     int mask = world->mask[id];
+	position pos = world->positions[id];
+	SDL_Rect *size_ptr = NULL;
+	SDL_Rect size;
+
     text txt = world->texts[id];
     TTF_Font *font = font_cache_get(&font_cache, txt.font, txt.size);
     SDL_Color color = {txt.r, txt.g, txt.b, txt.a};
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, txt.text, color);
-    SDL_Texture *texture = SDL_CreateTexttureFromSurface(renderer->sdl_renderer, text_surface);
+
+    // text can be scaled
+	if((mask & SIZE) == SIZE) {
+		size.w = world->sizes[id].x;
+		size.h = world->sizes[id].y;
+	} else { // otherwise use default size
+        size.w = text_surface->w;
+        size.h = text_surface->h;
+    }
+    size.x = pos.x;
+    size.y = pos.y;
+    size_ptr = &size;
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer->sdl_renderer, text_surface);
     SDL_FreeSurface(text_surface);
 
 	// Render with rotation, if present
 	if((mask & ROTATION) == ROTATION) {
 		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
-		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
+		SDL_RenderCopyEx(renderer->sdl_renderer, texture, NULL, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
 	} else {
-		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+		SDL_RenderCopy(renderer->sdl_renderer, texture, NULL, size_ptr);
 	}
 
     SDL_DestroyTexture(texture);

@@ -202,10 +202,12 @@ void world_remove_rotation_component(world *world, int entity_id) {
 	world->mask[entity_id] &= ~(ROTATION);
 }
 
-void world_add_text_component(world *world, int entity_id, char *font, char *text, int size, int style, int r, int g, int b, int a) {
+void world_add_text_component(world *world, int entity_id, char *text, char *font, int size, int style, int r, int g, int b, int a) {
     world->mask[entity_id] |= TEXT;
     world->texts[entity_id].text = (char *)malloc(sizeof(char) * (strlen(text) + 1));
+    strcpy(world->texts[entity_id].text, text);
     world->texts[entity_id].font = (char *)malloc(sizeof(char) * (strlen(font) + 1));
+    strcpy(world->texts[entity_id].font, font);
     world->texts[entity_id].size = size;
     world->texts[entity_id].style = style;
     world->texts[entity_id].r = r;
@@ -216,14 +218,14 @@ void world_add_text_component(world *world, int entity_id, char *font, char *tex
 
 void world_remove_text_component(world *world, int entity_id) {
     if ((world->mask[entity_id] | TEXT) == TEXT) {
-        if (world->text[entity_id].text != NULL) {
-            free(world->text[entity_id].text);
-            world->text[entity_id].text = NULL;
+        if (world->texts[entity_id].text != NULL) {
+            free(world->texts[entity_id].text);
+            world->texts[entity_id].text = NULL;
         }
 
-        if (world->text[entity_id].font != NULL) {
-            free(world->text[entity_id].font);
-            world->text[entity_id].font = NULL;
+        if (world->texts[entity_id].font != NULL) {
+            free(world->texts[entity_id].font);
+            world->texts[entity_id].font = NULL;
         }
         world->mask[entity_id] &= ~(TEXT);
     }

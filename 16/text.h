@@ -32,6 +32,4 @@ typedef struct {
     int a;
 } text;
 
-extern void set_text(struct text *, char *);
-
 #endif

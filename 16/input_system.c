@@ -192,6 +192,13 @@ void input_system_update(SDL_Event e, world *world) {
 			world_add_position_component(world, new_entity, 270, 196);
 			break;
 
+            case SDLK_w:
+            world_delete_all_entities(world);
+			new_entity = world_create_entity(world);
+			world_add_text_component(world, new_entity, "YEAH!", "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-R.ttf", 14, 0, 230, 230, 230, 0);
+			world_add_position_component(world, new_entity, 270, 196);
+            break;
+
 			default:
 			world_delete_all_entities(world);
 			new_entity = world_create_entity(world);
