@@ -21,6 +21,13 @@
 #include "world.h"
 #include "input_system.h"
 
+int entity_is_renderable(world *world, int id) {
+    if((world->mask[id] & GRAPHIC) == GRAPHIC || (world->mask[id] & TEXT) == TEXT || (world->mask[id] & ANIMATED_SPRITE) == ANIMATED_SPRITE) {
+        return 1;
+    }
+    return 0;
+}
+
 void input_system_update(SDL_Event e, world *world) {
 	if(e.type == SDL_KEYDOWN) {
 		int new_entity;
@@ -98,7 +105,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_r:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & COLOR) == COLOR) {
 						world->colors[i].r -= 32;
 					} else {
@@ -110,7 +117,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_g:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & COLOR) == COLOR) {
 						world->colors[i].g -= 32;
 					} else {
@@ -122,7 +129,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_b:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & COLOR) == COLOR) {
 						world->colors[i].b -= 32;
 					} else {
@@ -134,7 +141,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_a:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & COLOR) == COLOR) {
 						world->colors[i].a -= 32;
 					} else {
@@ -146,7 +153,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_t:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & ROTATION) == ROTATION) {
 						world->rotations[i].angle++;
 					} else {
@@ -158,7 +165,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_h:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & ROTATION) == ROTATION) {
 						world->rotations[i].flip = 1;
 					} else {
@@ -170,7 +177,7 @@ void input_system_update(SDL_Event e, world *world) {
 
 			case SDLK_v:
 			for(int i = 0; i < MAX_ENTITY; i++) {
-				if(((world->mask[i]) & GRAPHIC) == GRAPHIC) {
+                if(entity_is_renderable(world, i) == 1) {
 					if((world->mask[i] & ROTATION) == ROTATION) {
 						world->rotations[i].flip = 2;
 					} else {

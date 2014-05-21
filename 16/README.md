@@ -9,7 +9,7 @@ a new one.  This could be modified to create a single entity upon first
 keypress, updating it with subsequent keypresses.
 
 Keypresses of 'r', 'g', or 'b' add color modulation to the current entity with a
-graphic component that is already rendered to the screen, subtracting 32 from
+graphic component (sprite, animated sprite, or text rendered as a texture) that is already rendered to the screen, subtracting 32 from
 the red, green, or blue channel respectively, wrapping around if the number becomes
 negative.
 
@@ -76,6 +76,7 @@ components are stretched to
 cover the entire window.  This system renders static and animated sprites from a
 sprite sheet.  This system interfaces with the cache system, below.
 #### Cache system (cache.c)
-The cache system takes care of loading and fetching SDL\_Textures.
+The cache system takes care of loading and fetching SDL\_Textures.  This does
+not include text rendered as textures (as text can be dynamic).
 #### Font Cache System (font\_cache.c)
 Takes care of loading and fetching TTF\_Fonts.

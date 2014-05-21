@@ -168,7 +168,14 @@ void render_animated_sprite(renderer *renderer, world *world, cache ** const cac
 			SDL_SetTextureAlphaMod(texture, world->colors[id].a);
 		}
 	}
-	SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+
+	// Render with rotation, if present
+	if((mask & ROTATION) == ROTATION) {
+		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
+		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
+	} else {
+		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+	}
 }
 
 void render_point(renderer *renderer, world *world, int id) {
