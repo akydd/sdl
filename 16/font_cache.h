@@ -24,6 +24,6 @@ typedef struct font_cache font_cache;
 
 extern font_cache *font_cache_new(void);
 extern void font_cache_free(font_cache **);
-extern TTF_Font *font_cache_get(font_cache **, const char *, int);
+extern TTF_Font *font_cache_get(font_cache ** const, const char *, const int);
 
 #endif

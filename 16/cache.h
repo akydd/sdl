@@ -24,6 +24,6 @@ typedef struct cache cache;
 
 extern cache *cache_new(void);
 extern void cache_free(cache **cache);
-extern SDL_Texture *cache_get(cache **cache, SDL_Renderer *sdl_renderer, const char *key);
+extern SDL_Texture *cache_get(cache ** const cache, SDL_Renderer *sdl_renderer, const char *key);
 
 #endif

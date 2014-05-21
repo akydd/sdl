@@ -30,7 +30,7 @@ cache *cache_new(void)
 {
 	int flags = IMG_INIT_JPG|IMG_INIT_PNG|IMG_INIT_TIF;
 	IMG_Init(flags);
-	return NULL;
+    return NULL;
 }
 
 void cache_free(cache **the_cache)
@@ -46,8 +46,12 @@ void cache_free(cache **the_cache)
 	IMG_Quit();
 }
 
-SDL_Texture *cache_get(cache **the_cache, SDL_Renderer *sdl_renderer, const char *key)
+SDL_Texture *cache_get(cache ** const the_cache, SDL_Renderer *sdl_renderer, const char *key)
 {
+    if (*the_cache == NULL) {
+        (void)printf("Cache is empty\n");
+    }
+
 	// search for key and return value if found
 	for(cache *search_ptr = *the_cache; search_ptr; search_ptr = search_ptr->next) {
 		if(strcmp(key, search_ptr->key) == 0) {

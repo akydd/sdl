@@ -28,6 +28,6 @@ typedef struct renderer renderer;
 
 extern renderer *renderer_new();
 extern void renderer_free(renderer *);
-extern void renderer_render(renderer *, world *, cache *, font_cache *);
+extern void renderer_render(renderer *, world *, cache ** const, font_cache ** const);
 
 #endif

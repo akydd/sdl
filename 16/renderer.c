@@ -28,12 +28,12 @@ struct renderer {
 	SDL_Renderer *sdl_renderer;
 };
 
-void render_graphic(renderer *renderer, world *world, cache *cache, int id);
+void render_graphic(renderer *renderer, world *world, cache **cache, int id);
 void render_point(renderer *renderer, world *world, int id);
 void render_line(renderer *renderer, world *world, int id);
 void render_rectangle(renderer *renderer, world *world, int id);
-void render_animated_sprite(renderer *renderer, world *world, cache *cache, int id);
-void render_text(renderer *renderer, world *world, font_cache *font_cache, int id);
+void render_animated_sprite(renderer *renderer, world *world, cache ** const cache, int id);
+void render_text(renderer *renderer, world *world, font_cache ** const font_cache, int id);
 
 
 renderer *renderer_new() {
@@ -57,7 +57,7 @@ void renderer_free(renderer *renderer) {
 	free(renderer);
 }
 
-void renderer_render(renderer *renderer, world *world, cache *cache, font_cache *font_cache) {
+void renderer_render(renderer *renderer, world *world, cache **const cache, font_cache **const font_cache) {
 	// Clear surface to black
 	SDL_SetRenderDrawColor(renderer->sdl_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer->sdl_renderer);
@@ -84,10 +84,10 @@ void renderer_render(renderer *renderer, world *world, cache *cache, font_cache 
 	SDL_RenderPresent(renderer->sdl_renderer);
 }
 
-void render_graphic(renderer *renderer, world *world, cache *cache, int id) {
+void render_graphic(renderer *renderer, world *world, cache ** const cache, int id) {
 	(void)printf("Rendering graphic %d with image %s\n", id, world->graphics[id].image_file);
 	int mask = world->mask[id];
-	SDL_Texture *texture = cache_get(&cache, renderer->sdl_renderer, world->graphics[id].image_file);
+	SDL_Texture *texture = cache_get(cache, renderer->sdl_renderer, world->graphics[id].image_file);
 	SDL_Rect *size_ptr = NULL;
 	SDL_Rect size;
 	SDL_Rect *source_ptr = NULL;
@@ -126,10 +126,10 @@ void render_graphic(renderer *renderer, world *world, cache *cache, int id) {
 	}
 }
 
-void render_animated_sprite(renderer *renderer, world *world, cache *cache, int id) {
+void render_animated_sprite(renderer *renderer, world *world, cache ** const cache, int id) {
 	(void)printf("Rendering animated sprite %d with image %s\n", id, world->animated_sprites[id].image_file);
 	int mask = world->mask[id];
-	SDL_Texture *texture = cache_get(&cache, renderer->sdl_renderer, world->animated_sprites[id].image_file);
+	SDL_Texture *texture = cache_get(cache, renderer->sdl_renderer, world->animated_sprites[id].image_file);
 	SDL_Rect *size_ptr = NULL;
 	SDL_Rect size;
 	SDL_Rect *source_ptr = NULL;
@@ -210,14 +210,15 @@ void render_rectangle(renderer *renderer, world *world, int id) {
 	}
 }
 
-void render_text(renderer *renderer, world *world, font_cache *font_cache, int id) {
+void render_text(renderer *renderer, world *world, font_cache ** const font_cache, int id) {
+	(void)printf("Rendering text %d with text %s\n", id, world->texts[id].text);
     int mask = world->mask[id];
 	position pos = world->positions[id];
 	SDL_Rect *size_ptr = NULL;
 	SDL_Rect size;
 
     text txt = world->texts[id];
-    TTF_Font *font = font_cache_get(&font_cache, txt.font, txt.size);
+    TTF_Font *font = font_cache_get(font_cache, txt.font, txt.size);
     SDL_Color color = {txt.r, txt.g, txt.b, txt.a};
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, txt.text, color);
 
