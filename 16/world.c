@@ -202,7 +202,7 @@ void world_remove_rotation_component(world *world, int entity_id) {
 	world->mask[entity_id] &= ~(ROTATION);
 }
 
-void world_add_text_component(world *world, int entity_id, char *text, char *font, int size, int style, int r, int g, int b, int a) {
+void world_add_text_component(world *world, int entity_id, char *text, char *font, int size, int style) {
     world->mask[entity_id] |= TEXT;
     world->texts[entity_id].text = (char *)malloc(sizeof(char) * (strlen(text) + 1));
     strcpy(world->texts[entity_id].text, text);
@@ -210,10 +210,6 @@ void world_add_text_component(world *world, int entity_id, char *text, char *fon
     strcpy(world->texts[entity_id].font, font);
     world->texts[entity_id].size = size;
     world->texts[entity_id].style = style;
-    world->texts[entity_id].r = r;
-    world->texts[entity_id].g = g;
-    world->texts[entity_id].b = b;
-    world->texts[entity_id].a = a;
 }
 
 void world_remove_text_component(world *world, int entity_id) {

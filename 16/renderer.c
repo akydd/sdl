@@ -84,6 +84,16 @@ void renderer_render(renderer *renderer, world *world, cache **const cache, font
 	SDL_RenderPresent(renderer->sdl_renderer);
 }
 
+inline void render_texture(renderer *renderer, world *world, int id, int mask, SDL_Texture *texture, SDL_Rect *source_ptr, SDL_Rect *size_ptr) {
+	// apply rotation
+	if((mask & ROTATION) == ROTATION) {
+		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
+		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
+	} else {
+		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
+	}
+}
+
 void render_graphic(renderer *renderer, world *world, cache ** const cache, int id) {
 	(void)printf("Rendering graphic %d with image %s\n", id, world->graphics[id].image_file);
 	int mask = world->mask[id];
@@ -117,13 +127,7 @@ void render_graphic(renderer *renderer, world *world, cache ** const cache, int 
 		}
 	}
 
-	// Render with rotation, if present
-	if((mask & ROTATION) == ROTATION) {
-		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
-		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
-	} else {
-		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
-	}
+    render_texture(renderer, world, id, mask, texture, source_ptr, size_ptr);
 }
 
 void render_animated_sprite(renderer *renderer, world *world, cache ** const cache, int id) {
@@ -169,13 +173,8 @@ void render_animated_sprite(renderer *renderer, world *world, cache ** const cac
 		}
 	}
 
-	// Render with rotation, if present
-	if((mask & ROTATION) == ROTATION) {
-		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
-		SDL_RenderCopyEx(renderer->sdl_renderer, texture, source_ptr, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
-	} else {
-		SDL_RenderCopy(renderer->sdl_renderer, texture, source_ptr, size_ptr);
-	}
+    render_texture(renderer, world, id, mask, texture, source_ptr, size_ptr);
+
 }
 
 void render_point(renderer *renderer, world *world, int id) {
@@ -226,8 +225,17 @@ void render_text(renderer *renderer, world *world, font_cache ** const font_cach
 
     text txt = world->texts[id];
     TTF_Font *font = font_cache_get(font_cache, txt.font, txt.size);
-    SDL_Color color = {txt.r, txt.g, txt.b, txt.a};
-    SDL_Surface *text_surface = TTF_RenderText_Solid(font, txt.text, color);
+
+    // default text color is white
+    SDL_Color sdl_color = {255, 255, 255, 255};
+    if ((mask & COLOR) == COLOR) {
+        color color = world->colors[id];
+        sdl_color.r = color.r;
+        sdl_color.g = color.g;
+        sdl_color.b = color.b;
+        sdl_color.a = color.a;
+    }
+    SDL_Surface *text_surface = TTF_RenderText_Solid(font, txt.text, sdl_color);
 
     // text can be scaled
 	if((mask & SIZE) == SIZE) {
@@ -244,13 +252,7 @@ void render_text(renderer *renderer, world *world, font_cache ** const font_cach
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer->sdl_renderer, text_surface);
     SDL_FreeSurface(text_surface);
 
-	// Render with rotation, if present
-	if((mask & ROTATION) == ROTATION) {
-		SDL_Point center = {world->rotations[id].x, world->rotations[id].y};
-		SDL_RenderCopyEx(renderer->sdl_renderer, texture, NULL, size_ptr, world->rotations[id].angle, &center, world->rotations[id].flip);
-	} else {
-		SDL_RenderCopy(renderer->sdl_renderer, texture, NULL, size_ptr);
-	}
+    render_texture(renderer, world, id, mask, texture, NULL, size_ptr);
 
     SDL_DestroyTexture(texture);
 }

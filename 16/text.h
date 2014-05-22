@@ -26,10 +26,6 @@ typedef struct {
 	// The last 4 can be combined using bitwise OR.  ORing normal with any other
 	// style will override.
 	int style;
-    int r;
-    int g;
-    int b;
-    int a;
 } text;
 
 #endif
