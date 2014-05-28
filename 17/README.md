@@ -27,6 +27,9 @@ rendered to the screen.
 Keypress of 'v' will vertically flip the graphic entity that is currently
 rendered to the screen.
 
+Mouse click anywhere in the game window will create a text entity at the location
+of the mouse click.
+
 ### Entities
 An entity is simply an integer, which indexes into the entities' components and
 mask field.  The mask field tracks which components are attached to the
@@ -67,7 +70,7 @@ Contains entities and their components, and defines methods for creating and
 destroying them.
 #### Input System (input\_system.c)
 Only contains method that operates on the Entity Manager System, creating and
-destroying entities, based on user input.
+destroying entities, based on user keyboard and mouse input.
 #### Render system (renderer.c)
 The render system is responsible for drawing entities (those with textures and
 primitives, such as points, lines, rectangles) onto the screen.  If an entity has a size, position, or color components, these
